@@ -1,5 +1,5 @@
 {
-  "name": "circuit-simulator-frontend2",
+  "name": "circuit-simulator-frontend",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -20,9 +20,11 @@
     "@angular/platform-browser": "^14.2.0",
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
-    "@swimlane/ngx-graph": "^8.3.0",
-    "d3": "^7.9.0",
-    "ngx-graph": "^0.9.2",
+    "@types/cytoscape": "^3.21.3",
+    "bootstrap": "^5.3.3",
+    "gojs": "^3.0.4",
+    "ngx-spinner": "^14.0.0",
+    "ngx-toastr": "^14.3.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

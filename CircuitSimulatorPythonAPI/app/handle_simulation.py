@@ -19,12 +19,16 @@ def simulate_circuit(data):
 
 def save_circuit(data):
     try:
+        id = data.get('id')
         name = data.get('name')
         circuit_data = data.get('data')
+        sim_type = data.get('sim_type')
         if not name or not circuit_data:
             return {'status': 'error', 'message': 'Missing name or data for the circuit'}
 
-        new_circuit = RequestCircuit(name=name, data=circuit_data) # type: ignore
+        ## AJUSTAR SAVE CASO O CIRCUITO JA EXISTA
+
+        new_circuit = RequestCircuit(name=name, data=circuit_data, sim_type=sim_type, id=) # type: ignore
         db.session.add(new_circuit)
         db.session.commit()
         return {'status': 'success', 'message': f'Circuit {new_circuit.name} saved successfully', 'id': new_circuit.id}

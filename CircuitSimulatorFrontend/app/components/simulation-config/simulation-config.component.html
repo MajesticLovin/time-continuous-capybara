@@ -1,1 +1,24 @@
-<p>simulation-config works!</p>
+<!-- <div class="config-panel">
+  <form>
+    <label>Escolha o Simulador:</label>
+    <select (change)="onChange($event)">
+      <option value="pyspice">PySpice</option>
+      <option value="ahkab">Ahkab</option>
+      <option value="myhdl">MyHDL</option>
+    </select>
+  </form>
+</div> -->
+
+<div class="config-panel mb-3">
+  <form>
+    <div class="form-group">
+      <label>Escolha o Simulador:</label>
+      <select (change)="onChange($event)" class="form-control">
+        <option value="pyspice">PySpice</option>
+        <option value="ahkab">Ahkab</option>
+        <option value="myhdl">MyHDL</option>
+      </select>
+    </div>
+    <!-- Adicionar mais opções de configuração conforme necessário -->
+  </form>
+</div>

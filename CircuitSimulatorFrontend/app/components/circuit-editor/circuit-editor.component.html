@@ -1,1 +1,107 @@
-<p>circuit-editor works!</p>
+<!-- <div class="toolbar">
+  <select [(ngModel)]="selectedComponentType" class="form-control">
+    <option value="" disabled selected>Escolha um componente</option>
+    <option *ngFor="let type of componentTypes" [value]="type">
+      {{ type }}
+    </option>
+  </select>
+  <button
+    (click)="addNode(selectedComponentType)"
+    [disabled]="!selectedComponentType"
+  >
+    Adicionar Componente
+  </button>
+</div>
+
+<ngx-graph
+  [links]="links"
+  [nodes]="nodes"
+  [layout]="layout"
+  (update)="update$.next(true)"
+>
+  <ng-template #linkTemplate let-link="link">
+    <svg:path
+      [attr.d]="link.line"
+      [attr.stroke]="link.active ? '#333' : '#ccc'"
+      [attr.stroke-width]="link.active ? 2 : 1"
+      (mouseover)="hoveredLinkId = link.id"
+      (mouseout)="hoveredLinkId = null"
+      (click)="toggleLinkActive(link.id)"
+    ></svg:path>
+    <svg:text
+      *ngIf="hoveredLinkId === link.id"
+      [attr.x]="link.textPosition.x"
+      [attr.y]="link.textPosition.y"
+    >
+      {{ link.active ? "Desativar" : "Ativar" }}
+    </svg:text>
+  </ng-template>
+</ngx-graph> -->
+<!--
+<div class="toolbar mb-3">
+  <select [(ngModel)]="selectedComponentType" class="form-control">
+    <option value="" disabled selected>Escolha um componente</option>
+    <option *ngFor="let type of componentTypes" [value]="type">
+      {{ type }}
+    </option>
+  </select>
+  <button
+    (click)="addNode(selectedComponentType)"
+    [disabled]="!selectedComponentType"
+    class="btn btn-secondary"
+  >
+    Adicionar Componente
+  </button>
+</div>
+
+<div style="border: 1px solid #2d2e40; height: 500px">
+  <ngx-graph
+    [links]="links"
+    [nodes]="nodes"
+    [showMiniMap]="true"
+    [update$]="update$"
+  >
+    <ng-template #nodeTemplate let-node>
+      <svg:g
+        class="node"
+        [attr.transform]="
+          'translate(' + node.position.x + ',' + node.position.y + ')'
+        "
+      >
+        <svg:image
+          [attr.href]="node.icon"
+          [attr.width]="node.dimension.width"
+          [attr.height]="node.dimension.height"
+          x="0"
+          y="0"
+        ></svg:image>
+        <svg:text
+          alignment-baseline="middle"
+          [attr.x]="node.dimension.width / 2"
+          [attr.y]="-10"
+          text-anchor="middle"
+        >
+          {{ node.label }}
+        </svg:text>
+      </svg:g>
+    </ng-template>
+
+    <ng-template #linkTemplate let-link="link">
+      <svg:path
+        [attr.d]="link.line"
+        [attr.stroke]="link.active ? '#ffc43a' : '#732375'"
+        [attr.stroke-width]="link.active ? 2 : 1"
+        (mouseover)="hoveredLinkId = link.id"
+        (mouseout)="hoveredLinkId = null"
+        (click)="toggleLinkActive(link.id)"
+      ></svg:path>
+      <svg:text
+        *ngIf="hoveredLinkId === link.id"
+        [attr.x]="link.textPosition.x"
+        [attr.y]="link.textPosition.y"
+      >
+        {{ link.active ? "Desativar" : "Ativar" }}
+      </svg:text>
+    </ng-template>
+  </ngx-graph>
+</div> -->
