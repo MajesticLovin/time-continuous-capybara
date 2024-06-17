@@ -1,6 +1,0 @@
-MyHDL
-PySpice
-Ahkab
-Flask==1.1.2
-Flask-Cors==3.0.10
-Flask-SQLAlchemy==2.5.1
