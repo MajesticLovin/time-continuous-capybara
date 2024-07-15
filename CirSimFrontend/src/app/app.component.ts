@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CircuitService } from './services/circuit.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { SimulationRequest } from './models/circuit.model';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -21,13 +23,13 @@ export class AppComponent {
   loadCircuit() {
     this.spinner.show();
     this.circuitService.getCircuitById(this.circuitId).subscribe(
-      (data) => {
+      (data: HttpResponse<SimulationRequest>) => {
         this.spinner.hide();
         this.toastr.success('Circuit loaded successfully', 'Success');
         console.log('Circuit loaded:', data);
         // Tratar os dados carregados
       },
-      (error) => {
+      (error: HttpErrorResponse) => {
         this.spinner.hide();
         this.toastr.error('Failed to load circuit', 'Error');
         console.error('Error loading circuit:', error);
@@ -38,12 +40,12 @@ export class AppComponent {
   saveCircuit() {
     this.spinner.show();
     this.circuitService.saveCircuit(this.fileContent).subscribe(
-      (response) => {
+      (response: HttpResponse<SimulationRequest>) => {
         this.spinner.hide();
         this.toastr.success('Circuit saved successfully', 'Success');
         console.log('Circuit saved:', response);
       },
-      (error) => {
+      (error: HttpErrorResponse) => {
         this.spinner.hide();
         this.toastr.error('Failed to save circuit', 'Error');
         console.error('Error saving circuit:', error);
@@ -54,7 +56,8 @@ export class AppComponent {
   sendForAnalysis() {
     this.spinner.show();
     this.circuitService.sendCircuitForAnalysis(this.fileContent).subscribe(
-      (response) => {
+      (response: HttpResponse<SimulationRequest>) => {
+        // FIX RESPONSE TYPE TO BE ACCURATE TO ANSWER FROM SERVER
         this.spinner.hide();
         this.toastr.success(
           'Circuit sent for analysis successfully',
@@ -62,7 +65,7 @@ export class AppComponent {
         );
         console.log('Analysis sent:', response);
       },
-      (error) => {
+      (error: HttpErrorResponse) => {
         this.spinner.hide();
         this.toastr.error('Failed to send circuit for analysis', 'Error');
         console.error('Error sending analysis:', error);
@@ -87,20 +90,14 @@ export class AppComponent {
     }
   }
 
-  validateJSON(data: any) {
-    //   const hasBasicProps =
-    //     typeof json.id === 'string' &&
-    //     typeof json.name === 'string' &&
-    //     Object.values(SimulationType).includes(json.sim_type) &&
-    //     typeof json.ac_analysis === 'boolean';
-
-    //   if (!hasBasicProps) return false;
-
+  validateJSON(data: SimulationRequest) {
     const isValid =
-      data.nodes &&
-      data.nodes.every((node: any) => 'id' in node && 'type' in node) &&
-      data.links &&
-      data.links.every((link: any) => 'source' in link && 'target' in link);
+      data.data.nodes &&
+      data.data.nodes.every((node: any) => 'id' in node && 'type' in node) &&
+      data.data.links &&
+      data.data.links.every(
+        (link: any) => 'source' in link && 'target' in link
+      );
     if (!isValid) {
       this.toastr.error('Invalid JSON structure', 'Error');
       console.error('Invalid JSON structure');

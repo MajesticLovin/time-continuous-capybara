@@ -7,8 +7,12 @@ import { AppComponent } from './app.component';
 import { ConfigMenuComponent } from './config-menu/config-menu.component';
 import { CircuitEditorComponent } from './circuit-editor/circuit-editor.component';
 import { ResultsConsoleComponent } from './results-console/results-console.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { ToastrModule } from 'ngx-toastr';
-import { HttpClient } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { FormsModule } from '@angular/forms';
 
@@ -25,6 +29,10 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     BrowserAnimationsModule,
     NgxSpinnerModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
     FormsModule,
     ToastrModule.forRoot({
       timeOut: 3000,

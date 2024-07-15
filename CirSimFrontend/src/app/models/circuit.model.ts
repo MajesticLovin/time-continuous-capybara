@@ -1,90 +1,125 @@
 export enum ComponentType {
-  Resistor = 'resistor',
-  Inductor = 'inductor',
-  Capacitor = 'capacitor',
-  VoltageSource = 'voltageSource',
-  CurrentSource = 'currentSource',
-  Junction = 'junction',
+  RESISTOR = 'resistor',
+  CAPACITOR = 'capacitor',
+  INDUCTOR = 'inductor',
+  DIODE = 'diode',
+  TRANSISTOR = 'transistor',
+  VOLTAGE_SOURCE = 'voltage_source',
+  CURRENT_SOURCE = 'current_source',
+  OPAMP = 'opamp',
+  GROUND = 'ground'
 }
 
-export enum SimulationType {
-  PySpice = 'pyspice',
-  MyHDL = 'myhdl',
-  Ahkab = 'ahkab',
+export interface PortDetails {
+  portType: 'input' | 'output';
+  nodeId: string;
 }
 
-const pathToAssets = './../../assets/';
-
-export class Node {
-  id: string;
-  label: string;
+export class Component {
+  component_id: string;
   type: ComponentType;
-  value: number;
-  icon: string;
-  source?: string;
-  target?: string;
+  value: string;
+  label: string;
+  ports: Record<string, PortDetails>;
 
   constructor(
-    id: string,
+    component_id: string,
     type: ComponentType,
-    value: number,
-    label: string = '',
-    source?: string,
-    target?: string
+    value: string,
+    label: string,
+    ports: Record<string, PortDetails>
   ) {
-    this.id = id;
+    this.component_id = component_id;
     this.type = type;
     this.value = value;
     this.label = label;
-    this.source = source;
-    this.target = target;
-    this.icon = pathToAssets + this.selectIcon(type);
+    this.ports = ports;
   }
 
-  private selectIcon(type: ComponentType): string {
-    switch (type) {
-      case ComponentType.Resistor:
-        return 'resistor.png';
-      case ComponentType.Capacitor:
-        return 'capacitor.png';
-      case ComponentType.Inductor:
-        return 'inductor.png';
-      case ComponentType.VoltageSource:
-        return 'vsource.png';
-      case ComponentType.CurrentSource:
-        return 'csource.png';
-      case ComponentType.Junction:
-        return 'junction.png';
-      default:
-        return 'default.png';
-    }
+  toDict(): any {
+    return {
+      component_id: this.component_id,
+      type: this.type,
+      value: this.value,
+      label: this.label,
+      ports: this.ports,
+    };
   }
-}
 
-export class Link {
-  id: string;
-  source: string;
-  target: string;
-  label?: string;
-  active?: boolean = true;
-
-  constructor(id: string, source: string, target: string, label?: string) {
-    this.id = id;
-    this.source = source;
-    this.target = target;
-    this.label = label;
+  static fromDict(data: any): Component {
+    return new Component(
+      data.component_id,
+      ComponentType[data.type as keyof typeof ComponentType] ||
+        ComponentType.RESISTOR,
+      data.value,
+      data.label,
+      data.ports
+    );
   }
 }
 
-export interface CircuitData {
-  nodes: Node[];
-  links: Link[];
+export class Connection {
+  connection_id: string;
+  from_component: string;
+  from_port: string;
+  to_component: string;
+  to_port: string;
+
+  constructor(
+    connection_id: string,
+    from_component: string,
+    from_port: string,
+    to_component: string,
+    to_port: string
+  ) {
+    this.connection_id = connection_id;
+    this.from_component = from_component;
+    this.from_port = from_port;
+    this.to_component = to_component;
+    this.to_port = to_port;
+  }
+
+  toDict(): any {
+    return {
+      connection_id: this.connection_id,
+      from_component: this.from_component,
+      from_port: this.from_port,
+      to_component: this.to_component,
+      to_port: this.to_port,
+    };
+  }
+
+  static fromDict(data: any): Connection {
+    return new Connection(
+      data.connection_id,
+      data.from_component,
+      data.from_port,
+      data.to_component,
+      data.to_port
+    );
+  }
 }
 
-export interface SimulationRequest {
-  id: string;
-  name: string;
-  sim_type: SimulationType;
-  ac_analysis: boolean;
-  data: CircuitData;
+export class CircuitModel {
+  components: Component[];
+  connections: Connection[];
+
+  constructor(components: Component[], connections: Connection[]) {
+    this.components = components;
+    this.connections = connections;
+  }
+
+  toDict(): any {
+    return {
+      components: this.components.map((comp) => comp.toDict()),
+      connections: this.connections.map((conn) => conn.toDict()),
+    };
+  }
+
+  static fromDict(data: any): CircuitModel {
+    return new CircuitModel(
+      data.components.map((comp: any) => Component.fromDict(comp)),
+      data.connections.map((conn: any) => Connection.fromDict(conn))
+    );
+  }
 }

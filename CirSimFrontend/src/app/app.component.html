@@ -9,19 +9,25 @@
 
 <div class="container">
   <div class="header">
-    <div>
-      <input
-        type="text"
-        [(ngModel)]="circuitId"
-        placeholder="Enter Circuit ID"
-      />
-      <button (click)="loadCircuit()">Load Circuit</button>
-      <button (click)="saveCircuit()">Save Circuit</button>
-      <button (click)="sendForAnalysis()">Analyze Circuit</button>
-      <input type="file" (change)="onFileSelected($event)" />
-    </div>
-    <app-config-menu></app-config-menu>
+    <mat-form-field appearance="fill">
+      <mat-label>Enter Circuit ID</mat-label>
+      <input matInput [(ngModel)]="circuitId" placeholder="Circuit ID" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="loadCircuit()">
+      Load Circuit
+    </button>
+    <button mat-raised-button color="accent" (click)="saveCircuit()">
+      Save Circuit
+    </button>
+    <button mat-raised-button color="warn" (click)="sendForAnalysis()">
+      Analyze Circuit
+    </button>
+
+    <input type="file" (change)="onFileSelected($event)" />
   </div>
+
+  <app-config-menu></app-config-menu>
   <app-circuit-editor></app-circuit-editor>
   <div class="results-console">
     <app-results-console></app-results-console>

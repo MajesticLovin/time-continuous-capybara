@@ -66,3 +66,11 @@ def delete_circuit(circuit_id):
             return jsonify({'status': 'error', 'message': 'Circuit not found'}), 404
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 400
+
+@bp.route('/circuits', methods=['GET'])
+def list_circuits():
+    try:
+        circuits = Request.query.with_entities(Request.circuit_id, Request.circuit_name).all() # type: ignore
+        return jsonify({'status': 'success', 'data': [{'circuit_id': c[0], 'circuit_name': c[1]} for c in circuits]})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 400

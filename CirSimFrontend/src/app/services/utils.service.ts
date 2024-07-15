@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
-  Node,
-  CircuitData,
-  SimulationRequest,
-  SimulationType,
+  CircuitModel,
+  Component,
+  ComponentType,
+  Connection,
+  PortDetails,
 } from '../models/circuit.model';
 
 @Injectable({
@@ -51,7 +52,7 @@ export class UtilsService {
   //   return false; // No cycles found, circuit isn't closed
   // }
 
-  generateGUID(): string {
+  static generateGUID(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
       /[xy]/g,
       function (c) {
@@ -62,22 +63,200 @@ export class UtilsService {
     );
   }
 
-  formatForGoJS(circuitData: CircuitData): any {
-    let formattedNodes = circuitData.nodes.map((node) => ({
-      key: node.id,
-      text: node.label,
-      // Adicione mais atributos de formatação se necessário
+  circuitModelToGraphLinksModel(circuitModel: CircuitModel): any {
+    const nodeDataArray = circuitModel.components.map((comp) => ({
+      category: comp.type,
+      value: comp.value,
+      key: parseInt(comp.component_id),
     }));
 
-    let formattedLinks = circuitData.links.map((link) => ({
-      from: link.source,
-      to: link.target,
-      // Adicionar label ou outras propriedades se necessário
+    const linkDataArray = circuitModel.connections.map((conn) => ({
+      from: parseInt(conn.from_component),
+      to: parseInt(conn.to_component),
+      fromPort: conn.from_port,
+      toPort: conn.to_port,
+      key: parseInt(conn.connection_id),
     }));
 
     return {
-      nodeDataArray: formattedNodes,
-      linkDataArray: formattedLinks,
+      class: 'GraphLinksModel',
+      linkKeyProperty: 'key',
+      linkFromPortIdProperty: 'fromPort',
+      linkToPortIdProperty: 'toPort',
+      nodeDataArray: nodeDataArray,
+      linkDataArray: linkDataArray,
     };
+  }
+
+  graphLinksModeltoCircuitModel(graphData: any): CircuitModel {
+    const defaultPorts: Record<string, PortDetails> = {};
+
+    const components = graphData.nodeDataArray.map((node: any) => {
+      return new Component(
+        node.key.toString(),
+        node.category as ComponentType, // AJUSTAR NOME DOS CATEGORY NO GOJS SERIVCE
+        node.value,
+        node.label || '',
+        node.ports || defaultPorts
+      );
+    });
+
+    const connections = graphData.linkDataArray.map((link: any) => {
+      return new Connection(
+        link.key.toString(),
+        link.from.toString(),
+        link.to.toString(),
+        link.fromPort,
+        link.toPort
+      );
+    });
+
+    return new CircuitModel(components, connections);
+  }
+
+  spiceToGraphLinksModel(netlist: string): any {
+    const lines = netlist
+      .split('\n')
+      .filter((line) => line && !line.startsWith('*') && !line.startsWith('.'));
+    let key = 0;
+    const nodeDataArray: any[] = [];
+    const linkDataArray: any[] = [];
+
+    const portMappings: Record<string, string[]> = {
+      R: ['in', 'out'],
+      C: ['in', 'out'],
+      L: ['in', 'out'],
+      D: ['anode', 'cathode'],
+      Q: ['collector', 'base', 'emitter'],
+      U: ['in+', 'in-', 'out'],
+      V: ['pos', 'neg'],
+      I: ['pos', 'neg'],
+      G: [],
+    };
+
+    lines.forEach((line) => {
+      const parts = line.trim().split(/\s+/);
+      const componentName = parts[0];
+      const componentType = componentName[0];
+      const value = parts[parts.length - 1];
+      const nodes = parts.slice(1, parts.length - 1);
+
+      const componentEnum = this.mapSpiceTypeToComponent(componentType);
+      if (!componentEnum) return;
+
+      const componentId = ++key;
+      nodeDataArray.push({
+        key: componentId,
+        category: componentEnum,
+        value: value,
+        label: componentName,
+      });
+
+      const ports = portMappings[componentType];
+      nodes.forEach((node, index) => {
+        let fromPort = ports && ports.length > index ? ports[index] : 'unknown';
+        let toPort = 'node' + node;
+
+        linkDataArray.push({
+          from: componentId,
+          to: node,
+          fromPort: fromPort,
+          toPort: toPort,
+          key: ++key,
+        });
+      });
+    });
+
+    return {
+      class: 'GraphLinksModel',
+      linkKeyProperty: 'key',
+      linkFromPortIdProperty: 'fromPort',
+      linkToPortIdProperty: 'toPort',
+      nodeDataArray: nodeDataArray,
+      linkDataArray: linkDataArray,
+    };
+  }
+
+  circuitModelToSpice(circuitModel: CircuitModel): string {
+    let netlist = '';
+    const nodeConnections: Record<string, string[]> = {};
+    const portMappings: Record<string, string[]> = {
+      Resistor: ['+', '-'],
+      Capacitor: ['+', '-'],
+      Inductor: ['+', '-'],
+      Diode: ['anode', 'cathode'],
+      Transistor: ['collector', 'base', 'emitter'],
+      Opamp: ['in+', 'in-', 'out'],
+      'Voltage Source': ['pos', 'neg'],
+      'Current Source': ['pos', 'neg'],
+      Ground: [],
+    };
+
+    circuitModel.connections.forEach((conn) => {
+      if (!nodeConnections[conn.from_component]) {
+        nodeConnections[conn.from_component] = [];
+      }
+      if (!nodeConnections[conn.to_component]) {
+        nodeConnections[conn.to_component] = [];
+      }
+
+      const fromPort = conn.from_port;
+      const toPort = conn.to_port;
+      nodeConnections[conn.from_component].push(
+        conn.to_component + ' ' + toPort
+      );
+      nodeConnections[conn.to_component].push(
+        conn.from_component + ' ' + fromPort
+      );
+    });
+
+    circuitModel.components.forEach((comp) => {
+      const spiceType = this.mapComponentTypeToSpice(comp.type);
+      if (!spiceType) return;
+
+      let line = `${spiceType}${comp.component_id} `;
+      const connections = nodeConnections[comp.component_id].map(
+        (connection) => {
+          const [componentId, port] = connection.split(' ');
+          return `${componentId}(${port})`;
+        }
+      );
+
+      line += connections.join(' ') + ' ';
+      line += comp.value;
+      netlist += line + '\n';
+    });
+
+    return netlist;
+  }
+
+  private mapSpiceTypeToComponent(type: string): string | null {
+    const mapping: Record<string, string> = {
+      R: ComponentType.RESISTOR,
+      C: ComponentType.CAPACITOR,
+      L: ComponentType.INDUCTOR,
+      D: ComponentType.DIODE,
+      Q: ComponentType.TRANSISTOR,
+      V: ComponentType.VOLTAGE_SOURCE,
+      I: ComponentType.CURRENT_SOURCE,
+      U: ComponentType.OPAMP,
+      G: ComponentType.GROUND,
+    };
+    return mapping[type] || null;
+  }
+
+  private mapComponentTypeToSpice(type: ComponentType): string | null {
+    const mapping: Record<ComponentType, string> = {
+      [ComponentType.RESISTOR]: 'R',
+      [ComponentType.CAPACITOR]: 'C',
+      [ComponentType.INDUCTOR]: 'L',
+      [ComponentType.DIODE]: 'D',
+      [ComponentType.TRANSISTOR]: 'Q',
+      [ComponentType.VOLTAGE_SOURCE]: 'V',
+      [ComponentType.CURRENT_SOURCE]: 'I',
+      [ComponentType.OPAMP]: 'U',
+      [ComponentType.GROUND]: 'G',
+    };
+    return mapping[type] || null;
   }
 }
