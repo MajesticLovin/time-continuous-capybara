@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CircuitService } from './services/circuit.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { SimulationRequest } from './models/circuit.model';
+import { RequestModel } from './models/request.model';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
@@ -23,7 +23,7 @@ export class AppComponent {
   loadCircuit() {
     this.spinner.show();
     this.circuitService.getCircuitById(this.circuitId).subscribe(
-      (data: HttpResponse<SimulationRequest>) => {
+      (data: HttpResponse<RequestModel>) => {
         this.spinner.hide();
         this.toastr.success('Circuit loaded successfully', 'Success');
         console.log('Circuit loaded:', data);
@@ -40,7 +40,7 @@ export class AppComponent {
   saveCircuit() {
     this.spinner.show();
     this.circuitService.saveCircuit(this.fileContent).subscribe(
-      (response: HttpResponse<SimulationRequest>) => {
+      (response: HttpResponse<RequestModel>) => {
         this.spinner.hide();
         this.toastr.success('Circuit saved successfully', 'Success');
         console.log('Circuit saved:', response);
@@ -56,7 +56,7 @@ export class AppComponent {
   sendForAnalysis() {
     this.spinner.show();
     this.circuitService.sendCircuitForAnalysis(this.fileContent).subscribe(
-      (response: HttpResponse<SimulationRequest>) => {
+      (response: HttpResponse<RequestModel>) => {
         // FIX RESPONSE TYPE TO BE ACCURATE TO ANSWER FROM SERVER
         this.spinner.hide();
         this.toastr.success(
@@ -90,12 +90,15 @@ export class AppComponent {
     }
   }
 
-  validateJSON(data: SimulationRequest) {
+  validateJSON(data: RequestModel) {
+    var circuit = data.circuit_data;
     const isValid =
-      data.data.nodes &&
-      data.data.nodes.every((node: any) => 'id' in node && 'type' in node) &&
-      data.data.links &&
-      data.data.links.every(
+      circuit.components &&
+      circuit.connections.every(
+        (node: any) => 'id' in node && 'type' in node
+      ) &&
+      circuit.connections &&
+      circuit.connections.every(
         (link: any) => 'source' in link && 'target' in link
       );
     if (!isValid) {

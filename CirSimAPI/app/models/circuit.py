@@ -7,9 +7,9 @@ class ComponentType(Enum):
     CAPACITOR = 'capacitor'
     INDUCTOR = 'inductor'
     DIODE = 'diode'
-    TRANSISTOR = 'transistor'
     VOLTAGE_SOURCE = 'voltage_source'
     CURRENT_SOURCE = 'current_source'
+    TRANSISTOR = 'transistor'
     OPAMP = 'opamp'
     GROUND = 'ground'
     
