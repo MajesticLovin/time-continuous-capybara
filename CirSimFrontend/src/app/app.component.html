@@ -1,35 +1,91 @@
 <ngx-spinner
-  bdColor="rgba(51,51,51,0.8)"
-  size="medium"
-  color="#fff"
-  type="ball-spin-clockwise"
+        bdColor = "rgba(51,51,51,0.8)"
+        color = "#fff"
+        size = "medium"
+        type = "ball-spin-clockwise"
 >
-  <p style="color: white">Loading...</p>
+    <p style = "color: white">Loading...</p>
 </ngx-spinner>
 
-<div class="container">
-  <div class="header">
-    <mat-form-field appearance="fill">
-      <mat-label>Enter Circuit ID</mat-label>
-      <input matInput [(ngModel)]="circuitId" placeholder="Circuit ID" />
-    </mat-form-field>
+<div class = "container">
+    <div class = "header">
 
-    <button mat-raised-button color="primary" (click)="loadCircuit()">
-      Load Circuit
-    </button>
-    <button mat-raised-button color="accent" (click)="saveCircuit()">
-      Save Circuit
-    </button>
-    <button mat-raised-button color="warn" (click)="sendForAnalysis()">
-      Analyze Circuit
-    </button>
+        <div class = "circuitTitle">
+            <input
+                    [(ngModel)] = "circuitName"
+                    class = "customPlaceholder"
+                    matInput
+                    placeholder = "Circuit Name*"
+            />
 
-    <input type="file" (change)="onFileSelected($event)" />
-  </div>
+        </div>
+        <div class = "navCircuit">
+            <mat-form-field
+                    appearance = "fill"
+                    class = "customPlaceholder"
+            >
+                <!--                <mat-label class = "colorIcon">Enter Circuit ID</mat-label>-->
+                <input
+                        [(ngModel)] = "circuitId"
+                        class = "customPlaceholder"
+                        matInput
+                        placeholder = "Circuit ID"
+                />
+            </mat-form-field>
+        </div>
 
-  <app-config-menu></app-config-menu>
-  <app-circuit-editor></app-circuit-editor>
-  <div class="results-console">
-    <app-results-console></app-results-console>
-  </div>
+        <div class = "navButtons">
+
+            <button
+                    (click) = "loadCircuit()"
+                    mat-icon-button
+                    matTooltip = "Load Circuit"
+            >
+                <mat-icon class = "colorIcon">folder_open</mat-icon>
+            </button>
+            <button
+                    (click) = "saveCircuit()"
+                    mat-icon-button
+                    matTooltip = "Save Circuit"
+            >
+                <mat-icon class = "colorIcon">save</mat-icon>
+            </button>
+            <button
+                    (click) = "sendForAnalysis()"
+                    mat-icon-button
+                    matTooltip = "Send Circuit"
+            >
+                <mat-icon class = "colorIcon">insert_chart_outlined</mat-icon>
+            </button>
+
+            <input
+                #fileInput
+                    (change) = "onFileSelected($event)"
+                    style = "display: none"
+                    type = "file"
+            />
+
+            <button
+                    (click) = "fileInput.click()"
+                    mat-icon-button
+                    matTooltip = "Send file"
+            >
+                <mat-icon class = "colorIcon">folder</mat-icon>
+            </button>
+
+            <button
+                    mat-icon-button
+                    matTooltip = "Settings"
+            >
+                <mat-icon class = "colorIcon">settings</mat-icon>
+            </button>
+        </div>
+
+    </div>
+
+    <app-circuit-editor></app-circuit-editor>
+    <!--  <app-config-menu></app-config-menu>-->
+    <!--  <div class="results-console">-->
+    <!--    <app-results-console></app-results-console>-->
+    <!--  </div>-->
 </div>
