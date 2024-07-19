@@ -4,27 +4,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ConfigMenuComponent } from './config-menu/config-menu.component';
-import { CircuitEditorComponent } from './circuit-editor/circuit-editor.component';
-import { ResultsConsoleComponent } from './results-console/results-console.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
 import { ToastrModule } from 'ngx-toastr';
 
-// import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ConfigMenuComponent,
-    CircuitEditorComponent,
-    ResultsConsoleComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +38,7 @@ import { FormsModule } from '@angular/forms';
       closeButton: true,
     }),
   ],
-  providers: [],
+  providers: [HttpClient],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

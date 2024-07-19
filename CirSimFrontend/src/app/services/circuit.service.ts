@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { RequestModel } from './../models/request.model';
-const express = require('express');
-const cors = require('cors');
-var app = express();
-app.use(cors());
+// const express = require('express');
+// const cors = require('cors');
+// var app = express();
+// app.use(cors());
 // app.use(function (req, res, next) {
 //   res.setHeader('Access-Control-Allow-Origin', '*');
 //   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
