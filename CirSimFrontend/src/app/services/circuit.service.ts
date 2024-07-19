@@ -2,7 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { RequestModel } from './../models/request.model'; // Assuma que temos uma exportação dessas classes
+import { RequestModel } from './../models/request.model';
+const express = require('express');
+const cors = require('cors');
+var app = express();
+app.use(cors());
+// app.use(function (req, res, next) {
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   next();
+// });
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +25,7 @@ export class CircuitService {
 
   saveCircuit(circuitData: RequestModel): Observable<any> {
     const payload = RequestModel.toDict(circuitData);
+    console.log(payload);
     return this.http.post(`${this.apiUrl}/circuit/save`, payload);
   }
 
@@ -34,3 +46,4 @@ export class CircuitService {
     return this.http.get(`${this.apiUrl}/circuits`);
   }
 }
+// app.listen(3000, () => console.log('App listening on port 3000'));

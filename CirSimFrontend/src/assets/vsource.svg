@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_12"
+   data-name="Layer 12"
+   viewBox="0 0 957.79995 284.21999"
+   version="1.1"
+   sodipodi:docname="vsource.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   width="957.79993"
+   height="284.22"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.81133063"
+     inkscape:cx="1962.825"
+     inkscape:cy="1084.0217"
+     inkscape:window-width="3840"
+     inkscape:window-height="2071"
+     inkscape:window-x="2151"
+     inkscape:window-y="455"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_12" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+      .cls-1 {
+        fill: #231f20;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke: #231f20;
+        stroke-width: 12px;
+      }
+
+      .cls-1, .cls-3 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-2, .cls-3 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <circle
+     class="cls-3"
+     cx="142.11"
+     cy="-478.89996"
+     r="136.11"
+     id="circle1"
+     transform="rotate(90)" />
+  <path
+     class="cls-2"
+     d="m 615.00998,148.14005 267.4,-1.43 z"
+     id="path1" />
+  <path
+     class="cls-2"
+     d="m 70.469979,146.71005 272.320001,1.43 z"
+     id="path2" />
+  <circle
+     class="cls-1"
+     cx="146.70998"
+     cy="-917.10992"
+     r="34.689999"
+     id="circle2"
+     transform="rotate(90)" />
+  <circle
+     class="cls-1"
+     cx="146.70998"
+     cy="-40.689999"
+     r="34.689999"
+     id="circle3"
+     transform="rotate(90)" />
+  <path
+     class="cls-2"
+     d="m 566.54998,145.11005 h -102.26 z"
+     id="path3" />
+  <path
+     class="cls-2"
+     d="M 515.41998,196.97005 V 99.310048 Z"
+     id="path4" />
+  <path
+     class="cls-2"
+     d="M 415.81998,195.08005 V 97.420048 Z"
+     id="path5" />
+</svg>

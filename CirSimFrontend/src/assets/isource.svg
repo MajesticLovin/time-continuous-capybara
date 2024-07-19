@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_12"
+   data-name="Layer 12"
+   viewBox="0 0 957.79995 284.21999"
+   version="1.1"
+   sodipodi:docname="isource.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   width="957.79993"
+   height="284.22"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.81133063"
+     inkscape:cx="1962.8249"
+     inkscape:cy="1084.0217"
+     inkscape:window-width="3840"
+     inkscape:window-height="2071"
+     inkscape:window-x="2151"
+     inkscape:window-y="455"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_12" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+      .cls-1, .cls-2 {
+        fill: #231f20;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        stroke: #231f20;
+        stroke-width: 12px;
+      }
+
+      .cls-1, .cls-4 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-3, .cls-4 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <circle
+     class="cls-4"
+     cx="-142.11"
+     cy="478.89996"
+     r="136.11"
+     id="circle1"
+     transform="rotate(-90)" />
+  <path
+     class="cls-3"
+     d="m 342.78998,136.08001 -267.400001,1.43 z"
+     id="path1" />
+  <path
+     class="cls-3"
+     d="m 887.32998,137.51001 -272.32,-1.43 z"
+     id="path2" />
+  <circle
+     class="cls-1"
+     cx="-137.51003"
+     cy="40.689999"
+     r="34.689999"
+     id="circle2"
+     transform="rotate(-90)" />
+  <circle
+     class="cls-1"
+     cx="-137.51003"
+     cy="917.10992"
+     r="34.689999"
+     id="circle3"
+     transform="rotate(-90)" />
+  <path
+     class="cls-3"
+     d="m 391.24998,139.11001 h 102.26 z"
+     id="path3" />
+  <polygon
+     class="cls-2"
+     points="1912.5,650.75 1855.99,589.13 1974.12,589.13 "
+     id="polygon3"
+     transform="rotate(-90,977.28501,1075.055)" />
+</svg>

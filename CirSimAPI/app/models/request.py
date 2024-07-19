@@ -1,7 +1,7 @@
 from enum import Enum
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from circuit import CircuitModel
+from .circuit import CircuitModel
 
 
 class AnalysisType(Enum):

@@ -1,13 +1,13 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from CirSimAPI.app.database import db
 from flask_cors import CORS
-from .controllers.simulation_controller import bp as simulation_bp
+from CirSimAPI.app.controllers.simulation_controller import bp as simulation_bp    
+from CirSimAPI.app.controllers import simulation_controller
 
 # Cria instâncias do aplicativo e extensões
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///circuitdb.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy()
 
 def create_app():
     app.register_blueprint(simulation_bp, url_prefix='/api')
@@ -15,7 +15,6 @@ def create_app():
     
     db.init_app(app)
 
-    from .controllers import simulation_controller
     app.register_blueprint(simulation_controller.bp)
 
     with app.app_context():

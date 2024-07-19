@@ -2,7 +2,7 @@ from CirSimAPI.app.models.circuit import CircuitModel, ComponentType
 from CirSimAPI.app.models.request import AdditionalParams, AnalysisType, AnalyzerType
 from CirSimAPI.app.utilities.util import convert_to_simple_components
 from PySpice.Spice.Netlist import Circuit as PySpiceCircuit
-from PySpice.Unit import u # type: ignore
+from PySpice.Unit import * # type: ignore
 from ahkab.circuit import Circuit as AhkabCircuit
 from ahkab import new_dc, new_ac, new_tran, run
 
@@ -32,31 +32,17 @@ class SimulationService:
                 to_port = connection['to_port']
                 
                 if component.component_type == ComponentType.RESISTOR:
-                    circuit.R(component.component_id, node1, node2, component.value * u.ohm)
+                    circuit.R(component.component_id, node1, node2, component.value * 1@U_Ohm) # type: ignore
                 elif component.component_type == ComponentType.CAPACITOR:
-                    circuit.C(component.component_id, node1, node2, component.value * u.F)
+                    circuit.C(component.component_id, node1, node2, component.value * 1@u_F) # type: ignore
                 elif component.component_type == ComponentType.INDUCTOR:
-                    circuit.L(component.component_id, node1, node2, component.value * u.H)
+                    circuit.L(component.component_id, node1, node2, component.value * 1@u_H) # type: ignore
                 elif component.component_type == ComponentType.DIODE:
                     circuit.D(component.component_id, node1, node2, model="default_diode_model")
                 elif component.component_type == ComponentType.VOLTAGE_SOURCE:
-                    circuit.V(component.component_id, node1, node2, component.value * u.V)
+                    circuit.V(component.component_id, node1, node2, component.value * 1@u_V) # type: ignore
                 elif component.component_type == ComponentType.CURRENT_SOURCE:
-                    circuit.I(component.component_id, node1, node2, component.value * u.A)
-                elif component.component_type == ComponentType.OPAMP:
-                    if from_port == 'in+' or to_port == 'in+':
-                        circuit.A(component.component_id, node1, node2, 'inp')
-                    elif from_port == 'in-' or to_port == 'in-':
-                        circuit.A(component.component_id, node1, node2, 'inn')
-                    elif from_port == 'out' or to_port == 'out':
-                        circuit.A(component.component_id, node1, node2, 'out')
-                elif component.component_type == ComponentType.TRANSISTOR:
-                    if from_port == 'base' or to_port == 'base':
-                        circuit.Q(component.component_id, node1, node2, 'b', model="default_transistor_model")
-                    elif from_port == 'collector' or to_port == 'collector':
-                        circuit.Q(component.component_id, node1, node2, 'c', model="default_transistor_model")
-                    elif from_port == 'emitter' or to_port == 'emitter':
-                        circuit.Q(component.component_id, node1, node2, 'e', model="default_transistor_model")
+                    circuit.I(component.component_id, node1, node2, component.value * 1@u_A) # type: ignore
         
         sim = additional_params.pyspice_backend
         results = {}
@@ -71,13 +57,13 @@ class SimulationService:
                         'current': {f"I({source.name})": float(source.dc_value) for source in circuit.sources if source.dc_value}
                     }
                 elif analysis_type == AnalysisType.AC:
-                    analysis = circuit.simulator(simulator=sim).ac(start_frequency=params.get('start_frequency', 1@u.Hz), stop_frequency=params.get('stop_frequency', 1@u.kHz), number_of_points=params.get('number_of_points', 10))
+                    analysis = circuit.simulator(simulator=sim).ac(start_frequency=params.get('start_frequency', 1@u.Hz), stop_frequency=params.get('stop_frequency', 1@u.kHz), number_of_points=params.get('number_of_points', 10)) # type: ignore
                     results['ac'] = {
                         'voltage': {node: float(v) for node, v in analysis.nodes.items()}, # type: ignore
                         'current': {f"I({source.name})": {f: float(i) for f, i in zip(analysis.frequency, source.ac.magnitude)} for source in circuit.sources} # type: ignore
                     }
                 elif analysis_type == AnalysisType.TRANSIENT:
-                    analysis = circuit.simulator(simulator=sim).transient(step_time=params.get('step_time', 1@u.ms), end_time=params.get('end_time', 10@u.ms))
+                    analysis = circuit.simulator(simulator=sim).transient(step_time=params.get('step_time', 1@u.ms), end_time=params.get('end_time', 10@u.ms)) # type: ignore
                     results['transient'] = {
                         'voltage': {node: list(v) for node, v in analysis.nodes.items()}, # type: ignore
                         'current': {f"I({source.name})": list(source.transient) for source in circuit.sources}
@@ -117,22 +103,6 @@ class SimulationService:
                     my_circuit.add_isource(component.component_id, n1=node1, n2=node2, dc_value=component.value)
                 elif component.component_type == ComponentType.DIODE:
                     my_circuit.add_diode(component.component_id, n1=node1, n2=node2, model_label='default_diode_model')
-                elif component.component_type == ComponentType.TRANSISTOR:
-                    # Assumindo que os transistores são NPN e os nós são coletor, base e emissor
-                    base_node = get_or_create_node(component.component_id, 'base')
-                    collector_node = get_or_create_node(component.component_id, 'collector')
-                    emitter_node = get_or_create_node(component.component_id, 'emitter')
-                    my_circuit.add_transistor(component.component_id, nc=base_node, nb=collector_node, na=emitter_node, model='pnp')
-                elif component.component_type == ComponentType.OPAMP:
-                    # Assumindo nós: entrada positiva, entrada negativa e saída
-                    in_plus_node = get_or_create_node(component.component_id, 'in+')
-                    in_minus_node = get_or_create_node(component.component_id, 'in-')
-                    out_node = get_or_create_node(component.component_id, 'out')
-                    my_circuit.add_opamp(component.component_id, np=in_plus_node, nn=in_minus_node, no=out_node)
-                elif component.component_type == ComponentType.GROUND:
-                    # Assumindo que '0' é o nó de terra
-                    my_circuit.create_node('0', node1)
-                    my_circuit.add_node('0', node2)
 
             if not additional_params.part_id:
                 sources = [x.component_id for x in circuit_model.components if x.type is ComponentType.VOLTAGE_SOURCE]

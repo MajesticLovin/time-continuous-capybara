@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_9"
+   data-name="Layer 9"
+   viewBox="0 0 957.79993 178.30928"
+   version="1.1"
+   sodipodi:docname="diode.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   width="957.79993"
+   height="178.30928"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.48232865"
+     inkscape:cx="757.78206"
+     inkscape:cy="1082.2496"
+     inkscape:window-width="1722"
+     inkscape:window-height="1250"
+     inkscape:window-x="3305"
+     inkscape:window-y="1263"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Layer_9" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+      .cls-1 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #231f20;
+        stroke: #231f20;
+        stroke-width: 12px;
+      }
+
+      .cls-2 {
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+  <polygon
+     class="cls-2"
+     points="1585.79,671.62 1490.23,671.62 1502.2,686.06 1502.2,1026.06 1502.2,614.95 1502.2,149.64 1496.79,481.62 1585.79,481.62 1502.2,652.73 1502.2,671.62 "
+     id="polygon1"
+     transform="rotate(-90,747.6498,844.13983)" />
+  <polygon
+     class="cls-2"
+     points="1419.48,672.62 1515.03,672.62 1503.06,687.06 1503.06,1027.06 1503.06,615.95 1503.06,150.64 1508.48,482.62 1419.48,482.62 1503.06,653.73 1503.06,672.62 "
+     id="polygon2"
+     transform="rotate(-90,747.6498,844.13983)" />
+  <circle
+     class="cls-1"
+     cx="-88.999603"
+     cy="40.689999"
+     r="34.689999"
+     id="circle2"
+     transform="rotate(-90)" />
+  <circle
+     class="cls-1"
+     cx="-88.999603"
+     cy="917.10992"
+     r="34.689999"
+     id="circle3"
+     transform="rotate(-90)" />
+</svg>

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as fs from 'fs';
 import {
   CircuitModel,
   Component,
@@ -11,7 +12,7 @@ import {
   providedIn: 'root',
 })
 export class UtilsService {
-  // static performDFSOnCircuit(nodes: Node[]): boolean {
+  // performDFSOnCircuit(nodes: Node[]): boolean {
   //   const visited = new Set<string>();
   //   const stack = new Set<string>();
 
@@ -52,7 +53,7 @@ export class UtilsService {
   //   return false; // No cycles found, circuit isn't closed
   // }
 
-  static generateGUID(): string {
+  generateGUID(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
       /[xy]/g,
       function (c) {
@@ -90,13 +91,13 @@ export class UtilsService {
 
   graphLinksModeltoCircuitModel(graphData: any): CircuitModel {
     const defaultPorts: Record<string, PortDetails> = {};
-
+    console.log(graphData)
     const components = graphData.nodeDataArray.map((node: any) => {
       return new Component(
         node.key.toString(),
         node.category as ComponentType, // AJUSTAR NOME DOS CATEGORY NO GOJS SERIVCE
         node.value,
-        node.label || '',
+        node.loc,
         node.ports || defaultPorts
       );
     });
@@ -230,7 +231,7 @@ export class UtilsService {
     return netlist;
   }
 
-  private mapSpiceTypeToComponent(type: string): string | null {
+  mapSpiceTypeToComponent(type: string): string | null {
     const mapping: Record<string, string> = {
       R: ComponentType.RESISTOR,
       C: ComponentType.CAPACITOR,
@@ -245,7 +246,7 @@ export class UtilsService {
     return mapping[type] || null;
   }
 
-  private mapComponentTypeToSpice(type: ComponentType): string | null {
+  mapComponentTypeToSpice(type: ComponentType): string | null {
     const mapping: Record<ComponentType, string> = {
       [ComponentType.RESISTOR]: 'R',
       [ComponentType.CAPACITOR]: 'C',
@@ -258,5 +259,19 @@ export class UtilsService {
       [ComponentType.GROUND]: 'G',
     };
     return mapping[type] || null;
+  }
+
+  extractPathDFromSVGFile(filePath: string): string | null {
+    try {
+      const svgContent = fs.readFileSync(filePath, 'utf8');
+      console.log(svgContent);
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(svgContent, 'image/svg+xml');
+      const path = svgDoc.querySelector('path');
+      return path ? path.getAttribute('d') : null;
+    } catch (error) {
+      console.error('Error reading SVG file:', error);
+      return null;
+    }
   }
 }

@@ -1,13 +1,14 @@
 from flask import Blueprint, request, jsonify
 from CirSimAPI.app.services.simulation_service import SimulationService
 from CirSimAPI.app.models.request import Request
-from app import db
+from CirSimAPI.app import db
 
 bp = Blueprint('simulation', __name__)
 
 @bp.route('/circuit/simulate', methods=['POST'])
 def simulate_circuit():
     data = request.get_json()
+    print(data)
     sim_service = SimulationService()
     circuit_data = data.get('circuit_data')
     additional_params = data.get('additional_params')

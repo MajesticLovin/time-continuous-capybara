@@ -1,40 +1,40 @@
 import { CircuitModel } from "./circuit.model";
 
-enum AnalysisType {
+export enum AnalysisType {
   DC = 'dc',
   AC = 'ac',
   TRANSIENT = 'transient',
 }
 
-enum PySpiceBackend {
+export enum PySpiceBackend {
   NGSPICE_SHARED = 'ngspice-shared',
   NGSPICE_SUBPROCESS = 'ngspice-subprocess',
   XYCE_SERIAL = 'xyce-serial',
   XYCE_PARALLEL = 'xyce-parallel',
 }
 
-enum AnalyzerType {
+export enum AnalyzerType {
   PYSPICE = 'pyspice',
   AHKAB = 'ahkab',
 }
 
 export class AdditionalParams {
   id?: number;
-  analysis_types: Record<string, boolean>;
+  analysis_types: Record<AnalysisType, boolean>;
   pyspice_backend: PySpiceBackend;
   part_id: string;
   analyzer_type: AnalyzerType;
-  pyspiceparams: Record<string, any>;
-  ahkadparams: Record<string, any>;
+  pyspiceparams?: Record<string, any>;
+  ahkadparams?: Record<string, any>;
 
   constructor(
-    id: number | undefined,
-    analysis_types: Record<string, boolean>,
-    pyspice_backend: PySpiceBackend,
-    part_id: string,
     analyzer_type: AnalyzerType,
-    pyspiceparams: Record<string, any>,
-    ahkadparams: Record<string, any>
+    analysis_types: Record<AnalysisType, boolean>,
+    pyspice_backend: PySpiceBackend,
+    id?: number | undefined,
+    part_id: string = '',
+    pyspiceparams?: Record<string, any>,
+    ahkadparams?: Record<string, any>
   ) {
     this.id = id;
     this.analysis_types = analysis_types;

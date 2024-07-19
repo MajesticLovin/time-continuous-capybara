@@ -3,6 +3,7 @@
   grid-template-rows: 50px 1fr; /* 50px para o cabeçalho e o restante para o editor */
   height: 100vh;
   width: 100%;
+  max-width: -webkit-fill-available;
 }
 
 .header {
@@ -15,7 +16,8 @@
   justify-content: space-between;
 }
 
-.customPlaceholder::placeholder, .customPlaceholder, {
+.customPlaceholder::placeholder,
+.customPlaceholder {
   color: cornsilk;
 }
 
@@ -31,4 +33,15 @@ app-circuit-editor {
 
 .colorIcon {
   color: cornsilk;
+}
+
+.editor-container {
+  display: grid;
+  grid-template-columns: 150px auto; /* Largura da paleta e diagrama */
+  height: 100%; /* Utilizar o espaço restante do container parent */
+}
+
+.palette {
+  border-right: 2px solid #ccc;
+  overflow: auto; /* Para scrolling se houver muitos itens */
 }

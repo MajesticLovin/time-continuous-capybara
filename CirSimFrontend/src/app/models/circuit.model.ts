@@ -19,20 +19,20 @@ export class Component {
   component_id: string;
   type: ComponentType;
   value: string;
-  label: string;
+  loc: string;
   ports: Record<string, PortDetails>;
 
   constructor(
     component_id: string,
     type: ComponentType,
     value: string,
-    label: string,
+    loc: string,
     ports: Record<string, PortDetails>
   ) {
     this.component_id = component_id;
     this.type = type;
     this.value = value;
-    this.label = label;
+    this.loc = loc;
     this.ports = ports;
   }
 
@@ -41,7 +41,7 @@ export class Component {
       component_id: this.component_id,
       type: this.type,
       value: this.value,
-      label: this.label,
+      label: this.loc,
       ports: this.ports,
     };
   }
