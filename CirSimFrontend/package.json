@@ -18,7 +18,8 @@
     "https": false,
     "stream": false,
     "crypto": false,
-    "querystring": false
+    "querystring": false,
+    "async_hooks": false
   },
   "private": true,
   "dependencies": {

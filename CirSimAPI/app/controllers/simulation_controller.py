@@ -1,17 +1,18 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
 from CirSimAPI.app.services.simulation_service import SimulationService
 from CirSimAPI.app.models.request import Request
 from CirSimAPI.app import db
 
-bp = Blueprint('simulation', __name__)
-
+bp = Blueprint(name='simulation',import_name= __name__)
+# @cross_origin()
 @bp.route('/circuit/simulate', methods=['POST'])
 def simulate_circuit():
     data = request.get_json()
-    print(data)
     sim_service = SimulationService()
     circuit_data = data.get('circuit_data')
     additional_params = data.get('additional_params')
+    print('no controller')
     
     try:
         results = sim_service.run_simulation(circuit_data=circuit_data, additional_params=additional_params)
@@ -19,6 +20,7 @@ def simulate_circuit():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 400
 
+# @cross_origin()
 @bp.route('/circuit/save', methods=['POST'])
 def save_circuit():
     data = request.get_json()
@@ -44,6 +46,7 @@ def save_circuit():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 400
 
+# @cross_origin()
 @bp.route('/circuit/<int:circuit_id>', methods=['GET'])
 def load_circuit(circuit_id):
     try:
@@ -55,6 +58,7 @@ def load_circuit(circuit_id):
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 400
 
+# @cross_origin()
 @bp.route('/circuit/delete/<int:circuit_id>', methods=['DELETE'])
 def delete_circuit(circuit_id):
     try:
@@ -68,6 +72,7 @@ def delete_circuit(circuit_id):
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 400
 
+# @cross_origin()
 @bp.route('/circuits', methods=['GET'])
 def list_circuits():
     try:

@@ -8,7 +8,6 @@ from ahkab import new_dc, new_ac, new_tran, run
 
 class SimulationService:  
     def run_simulation(self, circuit_data, additional_params):
-        
         circuit_model = CircuitModel.from_dict(circuit_data)
         additional_params = AdditionalParams.from_dict(additional_params)
         
@@ -47,7 +46,7 @@ class SimulationService:
         sim = additional_params.pyspice_backend
         results = {}
         
-        for analysis_type, perform in additional_params.analysis_types.items():
+        for analysis_type, perform in additional_params.analisys_types.items():
             if perform:
                 params = getattr(additional_params, "pyspiceparams", {})
                 if analysis_type == AnalysisType.DC:
@@ -72,51 +71,55 @@ class SimulationService:
         return results
 
     def run_ahkab_simulation(self, circuit_model: CircuitModel, additional_params: AdditionalParams):
-        
-        params = additional_params.ahkadparams
+        print('made it to ahkab')
+        params = additional_params.ahkabparams
         my_circuit = AhkabCircuit(title="Ahkab")
         components = convert_to_simple_components(circuit_model.components, circuit_model.connections)
+        
+        component_dict = {}
 
-        # Dicionário de nós adicionais para componentes com múltiplas portas
-        node_dict = {}
-
-        # Função para obter ou criar nós para múltiplas portas
-        def get_or_create_node(component_id, port_id):
-            if (component_id, port_id) not in node_dict:
-                node_dict[(component_id, port_id)] = f"{component_id}_{port_id}"
-            return node_dict[(component_id, port_id)]
-
+        def get_or_create_node(node_id, port_id):
+            return f"{node_id}_{port_id}"
+        
+        # print(components)
         for component in components:
+            print(component)
             for connection in component.connections:
-                node1 = get_or_create_node(component.component_id, connection['from_port'])
-                node2 = get_or_create_node(connection['to_node'], connection['to_port'])
+                print(connection)
+                node1 = get_or_create_node(component.component_id, connection.get('from_port'))
+                node2 = get_or_create_node(connection.get('to_node', component.component_id), connection.get('to_port', 'in'))
+                print(node1)
+                print(node2)
                 
-                if component.component_type == ComponentType.RESISTOR:
-                    my_circuit.add_resistor(component.component_id, n1=node1, n2=node2, value=component.value)
-                elif component.component_type == ComponentType.CAPACITOR:
-                    my_circuit.add_capacitor(component.component_id, n1=node1, n2=node2, value=component.value)
-                elif component.component_type == ComponentType.INDUCTOR:
-                    my_circuit.add_inductor(component.component_id, n1=node1, n2=node2, value=component.value)
-                elif component.component_type == ComponentType.VOLTAGE_SOURCE:
-                    my_circuit.add_vsource(component.component_id, n1=node1, n2=node2, dc_value=component.value)
-                elif component.component_type == ComponentType.CURRENT_SOURCE:
-                    my_circuit.add_isource(component.component_id, n1=node1, n2=node2, dc_value=component.value)
-                elif component.component_type == ComponentType.DIODE:
-                    my_circuit.add_diode(component.component_id, n1=node1, n2=node2, model_label='default_diode_model')
+                component_type_map = {
+                    ComponentType.RESISTOR: my_circuit.add_resistor,
+                    ComponentType.CAPACITOR: my_circuit.add_capacitor,
+                    ComponentType.INDUCTOR: my_circuit.add_inductor,
+                    ComponentType.VOLTAGE_SOURCE: my_circuit.add_vsource,
+                    ComponentType.CURRENT_SOURCE: my_circuit.add_isource,
+                    ComponentType.DIODE: my_circuit.add_diode
+                }
 
-            if not additional_params.part_id:
-                sources = [x.component_id for x in circuit_model.components if x.type is ComponentType.VOLTAGE_SOURCE]
-                if len(sources) == 1:
-                    additional_params.part_id = sources[0]
-                elif len(sources) > 1:
-                    raise ValueError("Multiple sources found, please specify part_id")
-                else:
-                    raise ValueError("No source found for analysis")
+                if component.type in component_type_map:
+                    add_component_func = component_type_map[component.type]
+                    add_component_func(component.component_id, n1=node1, n2=node2, value=component.value)
+        
+        print(my_circuit.nodes_dict)
+        
+        if not additional_params.part_id:
+            sources = [x.component_id for x in components if x.type== "Voltage Source"]
+            if len(sources) == 1:
+                additional_params.part_id = sources[0]
+            elif len(sources) > 1:
+                raise ValueError("Multiple sources found, please specify part_id")
+            else:
+                raise ValueError("No source found for analysis")
 
         # Optamos por nao expor as configuracoes mais especificas da analise para simplificar o processo e a implementacao inicial
+        
 
         results = {}
-        for analysis_type, perform in additional_params.analysis_types.items():
+        for analysis_type, perform in additional_params.analisys_types.items():
             if perform:
                 params = getattr(additional_params, f"ahkabparams", {})
                 if analysis_type == AnalysisType.DC:

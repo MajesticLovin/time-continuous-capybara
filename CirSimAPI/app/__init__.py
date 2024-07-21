@@ -11,11 +11,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 def create_app():
     app.register_blueprint(simulation_bp, url_prefix='/api')
-    CORS(app)
+    CORS(app, supports_credentials=True)
     
     db.init_app(app)
-
-    app.register_blueprint(simulation_controller.bp)
 
     with app.app_context():
         db.create_all()

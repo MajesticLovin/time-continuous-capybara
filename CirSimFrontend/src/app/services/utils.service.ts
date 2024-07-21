@@ -91,11 +91,11 @@ export class UtilsService {
 
   graphLinksModeltoCircuitModel(graphData: any): CircuitModel {
     const defaultPorts: Record<string, PortDetails> = {};
-    console.log(graphData)
+    console.log(graphData);
     const components = graphData.nodeDataArray.map((node: any) => {
       return new Component(
         node.key.toString(),
-        node.category as ComponentType, // AJUSTAR NOME DOS CATEGORY NO GOJS SERIVCE
+        node.category as ComponentType,
         node.value,
         node.loc,
         node.ports || defaultPorts
@@ -106,8 +106,8 @@ export class UtilsService {
       return new Connection(
         link.key.toString(),
         link.from.toString(),
-        link.to.toString(),
         link.fromPort,
+        link.to.toString(),
         link.toPort
       );
     });

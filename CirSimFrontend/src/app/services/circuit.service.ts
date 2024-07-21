@@ -3,9 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { RequestModel } from './../models/request.model';
-// const express = require('express');
 // const cors = require('cors');
-// var app = express();
+// var app = require('express');
 // app.use(cors());
 // app.use(function (req, res, next) {
 //   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -46,4 +45,4 @@ export class CircuitService {
     return this.http.get(`${this.apiUrl}/circuits`);
   }
 }
-// app.listen(3000, () => console.log('App listening on port 3000'));
+// app.listen(5000, () => console.log('App listening on port 5000'));
